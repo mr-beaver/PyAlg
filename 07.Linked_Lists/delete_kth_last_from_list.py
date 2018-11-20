@@ -2,25 +2,27 @@ from test_framework import generic_test
 from list_node import ListNode
 
 
-# fix me: !! need to think more about k!!
-
 # Assumes L has at least k nodes, deletes the k-th last node in L.
 def remove_kth_last(L, k):
+    # L is actually the first element of the list
+    # We need a dummyhead because we might need to delete the first element in the list
+    # p1 and p2 has k gaps, therefore when p2 reaches end of the list p1 points to (k+1)th element from the end
+    # delete p1.next will yield the result
+
+    # make tow pointers that point to the first element of the list
     dummy_head = ListNode(0, L)
-    point1 = point2 = dummy_head
+    p1 = p2 = dummy_head
 
-    # advance point2 k step first
-    count = 0
-    while count < k:
-        point2 = point2.next
-        count += 1
+    # move p2 forward k steps
+    for _ in range(0, k):
+        p2 = p2.next
 
-    # advance both point1 and point2 until point2 hit the end of the array
-    while point2.next:
-        point1, point2 = point1.next, point2.next
+    # move p1, p2 together till p2 hits the end of the list
+    while p2.next:
+        p1, p2 = p1.next, p2.next
 
-    # remove k + 1
-    point1.next = point1.next.next
+    # delete the block after p1 is pointing to
+    p1.next = p1.next.next
 
     return dummy_head.next
 
