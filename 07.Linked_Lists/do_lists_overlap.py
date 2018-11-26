@@ -5,8 +5,38 @@ from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
 
 
+# this problem is list overlapping with possible cycle
+# for better understanding need to check "is_list_cyclic" first
 def overlapping_lists(l0, l1):
-    # TODO - you fill in here.
+    # There is a brutal force solution with O(n) time and space complexity.
+    # Use hash table to store the nodes and check whether newly newly traversed nodes are in the hash table already.
+
+    # brutal force implementation
+    p0 = l0
+    p1 = l1
+
+    traversed0 = {}  # use object id as an identifier to make sure key is unique
+    traversed1 = {}  # need a second hash table to avoid p1 stuck in infinite loop
+
+    # traverse list 0
+    while p0:
+        if id(p0) in traversed0:
+            break
+        else:
+            traversed0[id(p0)] = True
+            p0 = p0.next
+
+    # traverse list 1 to check whether there is overlapping
+    while p1:
+
+        if id(p1) in traversed0:
+            return p1
+        elif id(p1) in traversed1:
+            break
+        else:
+            traversed1[id(p1)] = True
+            p1 = p1.next
+
     return None
 
 
